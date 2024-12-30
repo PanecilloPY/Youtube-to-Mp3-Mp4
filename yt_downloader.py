@@ -2,7 +2,7 @@ import os
 import yt_dlp
 import tkinter as tk
 from tkinter import filedialog, messagebox
-from tkinter import ttk 
+from tkinter import ttk
 
 def download_video(url, format_choice, download_folder):
     ydl_opts = {}
@@ -37,7 +37,7 @@ def browse_folder():
 
 def start_download():
     url = url_entry.get().strip()
-    format_choice = format_var.get()
+    format_choice = format_var.get()  # Obtenemos el valor seleccionado
     folder = download_folder.get()
 
     if not url:
@@ -50,14 +50,14 @@ def start_download():
 
     download_video(url, format_choice, folder)
 
-# Config
+# Configuración
 root = tk.Tk()
 root.title("YouTube Downloader")
 root.geometry("600x200")  
 root.resizable(False, False)  
 root.config(bg="#f7f7f7") 
 
-# Font
+# Estilo de fuente
 font_style = ('Helvetica Neue', 12)
 
 frame = tk.Frame(root, padx=10, pady=10, bg="#f7f7f7")
@@ -73,20 +73,33 @@ frame.grid_rowconfigure(1, weight=0)
 frame.grid_rowconfigure(2, weight=0)  
 frame.grid_rowconfigure(3, weight=0)  
 
-# URL
+# Campo URL
 url_label = tk.Label(frame, text="URL del video de YouTube:", font=font_style, bg="#f7f7f7")
 url_label.grid(row=0, column=0, sticky="w", pady=3)
 url_entry = ttk.Entry(frame, width=40, font=font_style)
 url_entry.grid(row=0, column=1, padx=5, pady=5)
 
-# Opciones de formato en menú desplegable
+# Opciones de formato en Combobox
 format_label = tk.Label(frame, text="Formato de descarga:", font=font_style, bg="#f7f7f7")
 format_label.grid(row=1, column=0, sticky="w", pady=3)
 
-format_var = tk.StringVar(value="mp4")  # Valor por defecto
-format_options = ["mp4", "mp3"]  # Opciones de formato
-format_menu = ttk.OptionMenu(frame, format_var, *format_options)
+format_var = tk.StringVar(root, value="mp4")  # Valor por defecto en el StringVar
+format_options = ["mp4", "mp3"]  
+
+# Cambiar OptionMenu por un Combobox para mostrar ambas opciones
+format_menu = ttk.Combobox(frame, textvariable=format_var, values=format_options, state="readonly", width=10)
 format_menu.grid(row=1, column=1, padx=5, pady=5, sticky="w")
+
+# Estilo para quitar el subrayado y el borde
+style = ttk.Style()
+style.configure("TCombobox", 
+                fieldbackground="#f7f7f7",  
+                background="#f7f7f7",       
+                relief="flat",            
+                padding=5)                 
+
+# Aplicamos el estilo al Combobox
+format_menu.configure(style="TCombobox")
 
 # Carpeta de destino
 folder_label = tk.Label(frame, text="Carpeta de destino:", font=font_style, bg="#f7f7f7")
